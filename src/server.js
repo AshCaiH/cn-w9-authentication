@@ -15,7 +15,7 @@ app.use(express.json());
 const syncTables = async () => {
     app.use(User);
 
-    User.sync
+    User.sync();
 }
 
 app.get("/health", (req, res) => {
