@@ -1,15 +1,6 @@
 const User = require("./model");
 
-const sendError = (res, error) => {
-    res.status(500).json({
-        message: error.message,
-        error: error,
-    });
-}
-
-const sendSuccess = (res, message, extra, status) => {
-    res.status(status || 200).json({message, ...extra});
-}
+const {sendSuccess, sendError} = require("../../common/responses");
 
 module.exports = {
     // Create

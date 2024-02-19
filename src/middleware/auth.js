@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 
+const {sendSuccess, sendError} = require("../common/responses");
 const User = require("../models/users/model");
 
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
@@ -12,8 +13,6 @@ module.exports = {
             req.body.password = hashedPassword;
 
             next();
-        } catch (error) {
-            res.status(501).json({ message: error.message, error: error});
-        }
+        } catch (error) {sendError(res, error);}
     }
 }
