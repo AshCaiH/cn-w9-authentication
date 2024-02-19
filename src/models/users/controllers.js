@@ -18,6 +18,12 @@ module.exports = {
         } catch (error) {sendError(res, error);}
     },
 
+    login: async (req, res) => {
+        try {
+            sendSuccess(res, "Login successful");
+        } catch (error) {sendError(res, error)}
+    },
+
     // Read
     listUsers: async (req, res) => {
         try {
