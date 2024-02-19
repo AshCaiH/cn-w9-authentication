@@ -4,13 +4,13 @@ const express = require("express");
 const app = express();
 
 const User = require("./models/users/model");
-// const userRouter = require("./models/users/routes");
+const userRouter = require("./models/users/routes");
 
 const port = process.env.PORT || 5001;
 
 
 app.use(express.json());
-// app.use(userRouter)
+app.use(userRouter)
 
 const syncTables = async () => {
     app.use(User);
