@@ -1,4 +1,5 @@
 const User = require("./model");
+const jwt = require("jsonwebtoken");
 
 const {sendSuccess, sendError} = require("../../common/responses");
 
@@ -20,7 +21,22 @@ module.exports = {
 
     login: async (req, res) => {
         try {
-            sendSuccess(res, "Login successful");
+            const token = jwt.sign({
+                username: req.body.username,
+                isAdmin: true,
+            }, process.env.JWT_SECRET);
+
+            // console.log(
+            //     jwt.verify(token, process.env.JWT_SECRET)
+            // )
+
+            sendSuccess(res, "Login successful", {
+                user: {
+                    username: req.body.username,
+                    email: req.body.email,
+                    token: token,
+                }
+            }, 201);
         } catch (error) {sendError(res, error)}
     },
 
