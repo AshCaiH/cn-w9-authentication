@@ -25,8 +25,6 @@ module.exports = {
                 username: req.body.username,
                 isAdmin: true,
             }, process.env.JWT_SECRET);
-            
-            delete req.user["password"];
 
             sendSuccess(res, "Login successful", {user: req.user}, 201);
         } catch (error) {sendError(res, error)}
