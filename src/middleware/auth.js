@@ -18,11 +18,7 @@ module.exports = {
 
     comparePass: async (req, res, next) => {
         try {
-            console.log(req.body);
-
             const user = await User.findOne({where: {username: req.body.username}});
-
-            console.log(req.body.password, user.password);
 
             if(await bcrypt.compare(req.body.password, user.password)) {
                 next();
