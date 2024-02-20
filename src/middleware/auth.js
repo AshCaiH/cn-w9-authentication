@@ -7,27 +7,38 @@ const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
 
 module.exports = {
+    findUser: async(req, res, next) => {
+        try {
+            const user = await User.findOne({where: {username: req.body.username}});
+
+            req.user = user;
+            next();
+
+        } catch (error) {sendError(res, error);}
+    },
+
     hashPass: async (req, res, next) => {
         try {
-            const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-            req.body.password = hashedPassword;
+            if (!req.user) {
+                const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+                req.body.password = hashedPassword;
 
-            next();
+                next();
+            } else {
+                sendSuccess(res, "Username already in use", {}, 201);
+            }
         } catch (error) {sendError(res, error);}
     },
 
     comparePass: async (req, res, next) => {
         try {
-            console.log(req.body);
-
-            const user = await User.findOne({where: {username: req.body.username}});
-
-            console.log(req.body.password, user.password);
-
-            if(await bcrypt.compare(req.body.password, user.password)) {
+            if(!req.user) {
+                sendSuccess(res, "User not found.", {}, 201);
+            } else if (await bcrypt.compare(req.body.password, req.user.password)) {
+                delete req.user.dataValues["password"];
                 next();
             } else{
-                sendSuccess(res, "Incorrect password.");
+                sendSuccess(res, "Incorrect password.", {}, 201);
             }
 
         } catch (error) {sendError(res, error);}
