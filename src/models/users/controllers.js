@@ -25,18 +25,10 @@ module.exports = {
                 username: req.body.username,
                 isAdmin: true,
             }, process.env.JWT_SECRET);
+            
+            delete req.user["password"];
 
-            // console.log(
-            //     jwt.verify(token, process.env.JWT_SECRET)
-            // )
-
-            sendSuccess(res, "Login successful", {
-                user: {
-                    username: req.body.username,
-                    email: req.body.email,
-                    token: token,
-                }
-            }, 201);
+            sendSuccess(res, "Login successful", {user: req.user}, 201);
         } catch (error) {sendError(res, error)}
     },
 

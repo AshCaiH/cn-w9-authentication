@@ -20,6 +20,8 @@ module.exports = {
         try {
             const user = await User.findOne({where: {username: req.body.username}});
 
+            req.user = user.dataValues;
+
             if(await bcrypt.compare(req.body.password, user.password)) {
                 next();
             } else{
