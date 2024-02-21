@@ -25,9 +25,9 @@ module.exports = {
                 id: req.user.id
             }, process.env.JWT_SECRET);
 
-            req.loginToken = token;
+            req.body.loginToken = token;
 
-            sendSuccess(res, "Login successful", {user: req.user}, 201);
+            sendSuccess(res, "Login successful", {user: req.body}, 201);
         } catch (error) {sendError(res, error)}
     },
 
