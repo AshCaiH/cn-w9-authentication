@@ -21,13 +21,25 @@ module.exports = {
 
     login: async (req, res) => {
         try {
-            const token = jwt.sign({
-                id: req.user.id
-            }, process.env.JWT_SECRET);
 
-            req.body.loginToken = token;
+            if (req.authCheck) {
 
-            sendSuccess(res, "Login successful", {user: req.body}, 201);
+                const user = {
+                    id: req.authCheck.id,
+                    username: req.authCheck.username,
+                }
+
+                sendSuccess(res, "Persistent login successful", {user: user}, 201);
+
+            } else if (req.user) {
+                const token = jwt.sign({
+                    id: req.user.id
+                }, process.env.JWT_SECRET);
+
+                req.body.loginToken = token;
+
+                sendSuccess(res, "Login successful", {user: req.body}, 201);
+            }
         } catch (error) {sendError(res, error)}
     },
 

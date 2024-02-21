@@ -56,7 +56,9 @@ module.exports = {
 
             if (!user) sendSuccess(res, "User not authorised", {}, 401);
 
-            sendSuccess(res, "hello", {user: user.dataValues});
+            req.authCheck = user;
+
+            next();
         } catch (error) {sendError(res, error);}
     }
 }
