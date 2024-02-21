@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const {sendSuccess, sendError} = require("../common/responses");
 const User = require("../models/users/model");
@@ -43,4 +44,16 @@ module.exports = {
 
         } catch (error) {sendError(res, error);}
     },
+
+    tokenCheck: async (req, res, next) => {
+        try {
+            if (!req.header("Authorization")) throw new Error("No token passed");
+
+            const token = req.header("Authorization").replace("Bearer ", "");
+            const decodedToken = jwt.decode(token);
+            console.log(decodedToken);
+
+            sendSuccess(res, "hello");
+        } catch (error) {sendError(res, error);}
+    }
 }

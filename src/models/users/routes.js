@@ -12,4 +12,6 @@ userRouter.post("/users/login", auth.findUser, auth.comparePass, controllers.log
 // Read
 userRouter.get("/users", controllers.listUsers);
 
+userRouter.get("/users/authcheck", auth.tokenCheck, controllers.login);
+
 module.exports = userRouter
