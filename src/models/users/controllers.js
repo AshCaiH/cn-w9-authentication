@@ -19,7 +19,7 @@ module.exports = {
         } catch (error) {sendError(res, error);}
     },
 
-    login: async (req, res) => {
+    login: async (req, res, next) => {
         try {
 
             if (req.authCheck) {
@@ -29,7 +29,8 @@ module.exports = {
                     username: req.authCheck.username,
                 }
 
-                sendSuccess(res, "Persistent login successful", {user: user}, 201);
+                if (!next) sendSuccess(res, "Persistent login successful", {user: user}, 201);
+                else next();
 
             } else if (req.user) {
                 const token = jwt.sign({
@@ -46,9 +47,13 @@ module.exports = {
     // Read
     listUsers: async (req, res) => {
         try {
-            const user = await User.findAll();
+            if (req.authCheck) {
+                const user = await User.findAll();
 
-            sendSuccess(res, "List of users successfully acquired.", {user: user});
+                sendSuccess(res, "List of users successfully acquired.", {user: user});
+            } else {
+                sendSuccess(res, "Sorry, this feature is for logged-in users only.", {}, 401);
+            }
         } catch (error) {sendError(res, error);}
     }
 }
