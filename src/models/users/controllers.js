@@ -22,9 +22,10 @@ module.exports = {
     login: async (req, res) => {
         try {
             const token = jwt.sign({
-                username: req.body.username,
-                isAdmin: true,
+                id: req.user.id
             }, process.env.JWT_SECRET);
+
+            req.loginToken = token;
 
             sendSuccess(res, "Login successful", {user: req.user}, 201);
         } catch (error) {sendError(res, error)}
