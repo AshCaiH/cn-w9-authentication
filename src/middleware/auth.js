@@ -50,10 +50,13 @@ module.exports = {
             if (!req.header("Authorization")) throw new Error("No token passed");
 
             const token = req.header("Authorization").replace("Bearer ", "");
-            const decodedToken = jwt.decode(token);
-            console.log(decodedToken);
+            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+            
+            const user = await User.findOne({where : { id: decodedToken.id }});
 
-            sendSuccess(res, "hello");
+            if (!user) sendSuccess(res, "User not authorised", {}, 401);
+
+            sendSuccess(res, "hello", {user: user.dataValues});
         } catch (error) {sendError(res, error);}
     }
 }
