@@ -26,7 +26,7 @@ module.exports = {
 
                 next();
             } else {
-                sendSuccess(res, "Username already in use", {}, 201);
+                sendSuccess(res, "Username already in use", {error: "Username already in use"}, 201);
             }
         } catch (error) {sendError(res, error);}
     },
@@ -39,7 +39,7 @@ module.exports = {
                 delete req.user.dataValues["password"];
                 next();
             } else{
-                sendSuccess(res, "Incorrect password.", {}, 201);
+                sendSuccess(res, "Incorrect password.", {error: "Incorrect password"}, 201);
             }
 
         } catch (error) {sendError(res, error);}
