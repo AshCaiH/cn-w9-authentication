@@ -63,9 +63,13 @@ module.exports = {
     // Delete
     deleteUser: async (req, res) => {
         try {
-            const user = await User.destroy({where: {username: req.body.username}});
-            sendMessage(res, "User successfully deleted.", {user: user});
-            
+            console.log(req.authCheck);
+            if (req.authCheck) {
+                const user = await User.destroy({where: {id: req.authCheck.id}});
+                sendMessage(res, "User successfully deleted.", {user: user});
+            } else {
+                sendMessage(res, "You cannot delete a user account you aren't logged into.", {}, 401);
+            }            
         } catch (error) {sendError(res, error)};
     },
 }
