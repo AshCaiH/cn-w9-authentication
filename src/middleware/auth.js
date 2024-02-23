@@ -55,10 +55,10 @@ module.exports = {
             const user = await User.findOne({where : { id: decodedToken.id }});
 
             if (!user) sendMessage(res, "User not authorised", {}, 401);
-
-            req.authCheck = user;
-
-            next();
+            else {
+                req.authCheck = user;
+                next();
+            }
         } catch (error) {sendError(res, error);}
     }
 }

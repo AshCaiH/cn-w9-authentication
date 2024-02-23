@@ -20,22 +20,13 @@ module.exports = {
     login: async (req, res, next) => {
         try {
 
-            if (req.authCheck) {
-
-                const user = {
-                    id: req.authCheck.id,
-                    username: req.authCheck.username,
-                }
-
-                if (!next) sendMessage(res, "Persistent login successful", {user: user}, 201);
-                else next();
-
-            } else if (req.user) {
+            if (req.user) {
                 const token = jwt.sign({
                     id: req.user.id
                 }, process.env.JWT_SECRET);
 
                 req.body.loginToken = token;
+                delete req.body.password;
 
                 sendMessage(res, "Login successful", {user: req.body}, 201);
             }
@@ -59,7 +50,8 @@ module.exports = {
         try {
             if (req.authCheck) {
                 const user = {
-                    username: req.authCheck.username
+                    username: req.authCheck.username,
+                    loginToken: req.header("Authorization").replace("Bearer ", ""),
                 }
                 sendMessage(res, "User acquired.", {user: user});
             } else {
