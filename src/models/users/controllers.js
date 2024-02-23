@@ -52,7 +52,7 @@ module.exports = {
             } else {
                 sendMessage(res, "Sorry, this feature is for logged-in users only.", {}, 401);
             }
-        } catch (error) {sendError(res, error);}
+        } catch (error) {sendError(res, error)};
     },
 
     // Update
@@ -62,6 +62,10 @@ module.exports = {
 
     // Delete
     deleteUser: async (req, res) => {
-
+        try {
+            const user = await User.destroy({where: {username: req.body.username}});
+            sendMessage(res, "User successfully deleted.", {user: user});
+            
+        } catch (error) {sendError(res, error)};
     },
 }

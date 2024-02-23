@@ -14,4 +14,10 @@ userRouter.get("/users", auth.tokenCheck, controllers.login, controllers.listUse
 
 userRouter.get("/users/authcheck", auth.tokenCheck, controllers.login);
 
+// Update
+
+// Delete
+
+userRouter.delete("/users/delete", controllers.deleteUser);
+
 module.exports = userRouter
