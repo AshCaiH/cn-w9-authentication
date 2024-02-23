@@ -55,9 +55,22 @@ module.exports = {
         } catch (error) {sendError(res, error)};
     },
 
+    confirmToken: async (req, res) => {
+        try {
+            if (req.authCheck) {
+                const user = {
+                    username: req.authCheck.username
+                }
+                sendMessage(res, "User acquired.", {user: user});
+            } else {
+                sendMessage(res, "No token found.", {}, 401);
+            }
+        } catch (error) {sendError(res, error)};
+    },
+
     // Update
     updateUser: async (req, res) => {
-
+        sendMessage(res, "This feature is yet to be implemented.");
     },
 
     // Delete

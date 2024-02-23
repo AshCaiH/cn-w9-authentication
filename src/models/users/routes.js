@@ -10,14 +10,16 @@ userRouter.post("/users/register", auth.findUser, auth.hashPass, controllers.reg
 userRouter.post("/users/login", auth.findUser, auth.comparePass, controllers.login);
 
 // Read
-userRouter.get("/users", auth.tokenCheck, controllers.login, controllers.listUsers);
+userRouter.get("/users", auth.tokenCheck, controllers.listUsers);
 
-userRouter.get("/users/authcheck", auth.tokenCheck, controllers.login);
+userRouter.get("/users/authcheck", auth.tokenCheck, controllers.confirmToken);
 
 // Update
 
+userRouter.put("/users/update", auth.tokenCheck, controllers.updateUser);
+
 // Delete
 
-userRouter.delete("/users/delete", auth.tokenCheck, controllers.login, controllers.deleteUser);
+userRouter.delete("/users/delete", auth.tokenCheck, controllers.deleteUser);
 
 module.exports = userRouter
