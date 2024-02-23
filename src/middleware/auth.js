@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const {sendSuccess, sendError} = require("../common/responses");
+const {sendMessage: sendMessage, sendError} = require("../common/responses");
 const User = require("../models/users/model");
 
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
@@ -26,7 +26,7 @@ module.exports = {
 
                 next();
             } else {
-                sendSuccess(res, "Username already in use", {error: "Username already in use"}, 201);
+                sendMessage(res, "Username already in use", {error: "Username already in use"}, 201);
             }
         } catch (error) {sendError(res, error);}
     },
@@ -34,12 +34,12 @@ module.exports = {
     comparePass: async (req, res, next) => {
         try {
             if(!req.user) {
-                sendSuccess(res, "User not found.", {}, 201);
+                sendMessage(res, "User not found.", {}, 201);
             } else if (await bcrypt.compare(req.body.password, req.user.password)) {
                 delete req.user.dataValues["password"];
                 next();
             } else{
-                sendSuccess(res, "Incorrect password.", {error: "Incorrect password"}, 201);
+                sendMessage(res, "Incorrect password.", {error: "Incorrect password"}, 201);
             }
 
         } catch (error) {sendError(res, error);}
@@ -54,7 +54,7 @@ module.exports = {
             
             const user = await User.findOne({where : { id: decodedToken.id }});
 
-            if (!user) sendSuccess(res, "User not authorised", {}, 401);
+            if (!user) sendMessage(res, "User not authorised", {}, 401);
 
             req.authCheck = user;
 

@@ -1,21 +1,19 @@
 const User = require("./model");
 const jwt = require("jsonwebtoken");
 
-const {sendSuccess, sendError} = require("../../common/responses");
+const {sendMessage: sendMessage, sendError} = require("../../common/responses");
 
 module.exports = {
     // Create
     registerUser: async (req, res) => {
         try {
-            console.log("bing");
-
             const user = await User.create({
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
             })
 
-            sendSuccess(res, "User successfully registered", {user: user}, 201);
+            sendMessage(res, "User successfully registered", {user: user}, 201);
         } catch (error) {sendError(res, error);}
     },
 
@@ -29,7 +27,7 @@ module.exports = {
                     username: req.authCheck.username,
                 }
 
-                if (!next) sendSuccess(res, "Persistent login successful", {user: user}, 201);
+                if (!next) sendMessage(res, "Persistent login successful", {user: user}, 201);
                 else next();
 
             } else if (req.user) {
@@ -39,7 +37,7 @@ module.exports = {
 
                 req.body.loginToken = token;
 
-                sendSuccess(res, "Login successful", {user: req.body}, 201);
+                sendMessage(res, "Login successful", {user: req.body}, 201);
             }
         } catch (error) {sendError(res, error)}
     },
@@ -50,9 +48,9 @@ module.exports = {
             if (req.authCheck) {
                 const user = await User.findAll();
 
-                sendSuccess(res, "List of users successfully acquired.", {user: user});
+                sendMessage(res, "List of users successfully acquired.", {user: user});
             } else {
-                sendSuccess(res, "Sorry, this feature is for logged-in users only.", {}, 401);
+                sendMessage(res, "Sorry, this feature is for logged-in users only.", {}, 401);
             }
         } catch (error) {sendError(res, error);}
     }
