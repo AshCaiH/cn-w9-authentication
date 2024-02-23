@@ -10,6 +10,8 @@ userRouter.post("/users/register", auth.findUser, auth.hashPass, controllers.reg
 userRouter.post("/users/login", auth.findUser, auth.comparePass, controllers.login);
 
 // Read
-userRouter.get("/users", controllers.listUsers);
+userRouter.get("/users", auth.tokenCheck, controllers.login, controllers.listUsers);
+
+userRouter.get("/users/authcheck", auth.tokenCheck, controllers.login);
 
 module.exports = userRouter

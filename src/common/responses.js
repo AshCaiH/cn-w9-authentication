@@ -7,7 +7,7 @@ module.exports = {
         });
     },
 
-    sendSuccess: (res, message, extra, status) => {
+    sendMessage: (res, message, extra, status) => {
         res.status(status || 200).json({message, ...extra});
     },
 }
