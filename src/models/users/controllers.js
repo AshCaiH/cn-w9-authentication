@@ -53,5 +53,15 @@ module.exports = {
                 sendMessage(res, "Sorry, this feature is for logged-in users only.", {}, 401);
             }
         } catch (error) {sendError(res, error);}
-    }
+    },
+
+    // Update
+    updateUser: async (req, res) => {
+
+    },
+
+    // Delete
+    deleteUser: async (req, res) => {
+
+    },
 }
