@@ -50,6 +50,7 @@ module.exports = {
         try {
             if (req.authCheck) {
                 const user = {
+                    id: req.authCheck.id,
                     username: req.authCheck.username,
                     loginToken: req.header("Authorization").replace("Bearer ", ""),
                 }
@@ -62,7 +63,16 @@ module.exports = {
 
     // Update
     updateUser: async (req, res) => {
-        sendMessage(res, "This feature is yet to be implemented.");
+        try {
+            console.log(req.authCheck);
+            if (req.authCheck) {
+                const user = await User.update({email: req.body.email}, {where: {id: req.authCheck.id}})
+                delete user.email;
+                sendMessage(res, "User email successfully updated.", {user: user});
+            } else {
+                sendMessage(res, "You cannot update a user account you aren't logged into.", {}, 401);
+            }            
+        } catch (error) {sendError(res, error)};
     },
 
     // Delete
